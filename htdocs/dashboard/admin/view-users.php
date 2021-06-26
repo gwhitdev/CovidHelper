@@ -17,9 +17,16 @@
     }
 ?>
 <div class="row">
-    <h4>Users list</h4>
+    <div class="col-sm-12 col-md-6">
+        <h4>Users list</h4> 
+    </div>
 </div>
 <div class="row">
+    <div class="col-sm-12">
+    <a class="btn btn-sm btn-dark"href="/dashboard/admin/new-user.php"><i class="bi bi-person-plus-fill"></i> Create new user</a>
+    </div>
+</div>
+<div class="row"style="margin-top:15px">
     <div>
         <table class="table table-light table-hover">
             <thead class="table-dark">
