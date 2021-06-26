@@ -1,4 +1,3 @@
-<?php include '../includes/header.php'?>
 <?php
 
 session_start();
@@ -8,6 +7,9 @@ if(!isset($_SERVER['user_id']))
     $_SESSION = array();
     session_destroy();
 }
+$page_title = 'Good bye';
+include_once '../includes/header.php';
+
 ?>
 
 

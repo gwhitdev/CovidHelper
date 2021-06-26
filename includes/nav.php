@@ -5,7 +5,9 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
       <a class="navbar-brand" href="/">CovidHelper</a>
+      
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+      <?php if(isset($_SESSION['user_id'])) { ?>
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="/home.php">Home</a>
         </li>
@@ -15,7 +17,7 @@
         <li class="nav-item">
           <a class="nav-link" href="/forum/forum.php">Forum</a>
         </li>
-        
+        <?php } ?>
         
       </ul>
         <?php if(!isset($_SESSION['user_id']))

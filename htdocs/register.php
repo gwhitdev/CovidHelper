@@ -1,7 +1,4 @@
 <?php
-
-$page_title = 'Register';
-
 if($_SERVER['REQUEST_METHOD'] == 'POST')
 {
     require '../config/connect_users_db.php';
@@ -86,10 +83,12 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
 }
 }
 
+$page_title = 'Register';
+include '../includes/header.php';
 
 ?>
 
-<h1>Regster</h1>
+<h1>Register</h1>
 
 <form action="register.php" method="POST">
     <p>
@@ -105,3 +104,5 @@ if($_SERVER['REQUEST_METHOD'] == 'POST')
     </p>
     <button>Register</button>
 </form>
+
+<?php include '../includes/footer.php'; ?>

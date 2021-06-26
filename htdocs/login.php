@@ -1,8 +1,8 @@
 <?php 
-include '../includes/header.php';
 $page_title = 'Login';
-
+include '../includes/header.php';
 ?>
+
 <div class="row text-center">
     <div class="col-sm-12 md-3 lg-3">
         <h1>Login</h1>

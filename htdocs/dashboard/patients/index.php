@@ -1,12 +1,13 @@
 <?php
 
 session_start();
-include_once '../../../includes/header.php';
 if(!isset($_SESSION['user_id']))
 {
     require_once '../../../auth/login_tools.php';
     load();
 }
+$page_title = 'Patients Dashboard';
+include_once '../../../includes/header.php';
 ?>
 
 

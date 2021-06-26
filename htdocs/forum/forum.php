@@ -2,7 +2,6 @@
 <?php
 
 session_start();
-include_once '../../includes/header.php';
 
 if(!isset($_SESSION['user_id']))
 {
@@ -30,8 +29,9 @@ else
 {
     echo '<p>There are currently no messages.';
 }
+$page_title = 'Forum';
+include_once '../../includes/header.php';
 ?>
-
 <div class="row">
 <a href="post.php">Post message</a> 
 </div>

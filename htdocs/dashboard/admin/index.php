@@ -1,7 +1,7 @@
 <?php
 
 session_start();
-include '../../../includes/header.php';
+
 if(!isset($_SESSION['user_id']))
 {
     require_once '../../../auth/login_tools.php';
@@ -16,10 +16,10 @@ if(isset($_SESSION))
     $checked = checkPermissions($dbc,$user_id);
     if($checked == 'Not authorised') load('home.php');
 }
+
+$page_title = 'Admin and Medical Dashboard';
+include_once '../../../includes/header.php';
 ?>
-
-
-
 <div class="row text-center">
     <div class="col-sm-12 md-3 lg-3">
         <h1>Admin and Medical Dashboard</h1>

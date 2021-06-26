@@ -1,6 +1,3 @@
-<?php include '../../includes/header.php' ?>
-
-
 <?php
 session_start();
 if(!isset($_SESSION['user_id']))
@@ -8,6 +5,9 @@ if(!isset($_SESSION['user_id']))
     require_once '../../auth/login_tools.php';
     load();
 }
+$page_title = 'Add a new message';
+include_once '../../includes/header.php';
+
 ?>
 
     <form action="../actions/post_action.php"method="POST"accept_charset="utf-8">
