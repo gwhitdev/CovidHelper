@@ -37,12 +37,12 @@
         <?php if(!isset($_SESSION['user_id']))
         {
           
-          echo '<a class="nav-link" href="/login.php"><button class="btn btn-sm btn-outline btn-success">Login</button></a>';
+          echo '<a class="nav-link" href="/login.php"><button class="btn btn-sm btn-outline btn-success"><i class="bi bi-door-open-fill"></i> Login</button></a>';
         }
         else
         {
-          echo "Hello {$_SESSION['first_name']}, you are logged in.";
-          echo '<a class="nav-link" href="/goodbye.php"><button class="btn btn-sm btn-outline btn-success">Logout</button></a>';
+          echo "Welcome, {$_SESSION['first_name']}";
+          echo '<a class="nav-link" href="/goodbye.php"><button class="btn btn-sm btn-outline btn-success"><i class="bi bi-door-closed-fill"></i> Logout</button></a>';
         }
         ?>
         

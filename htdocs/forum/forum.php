@@ -1,16 +1,19 @@
-
 <?php
 
 session_start();
-$page_title = 'Forum';
-include_once '../../includes/header.php';
+
 if(!isset($_SESSION['user_id']))
 {
-    require_once('../..login_tools.phplogin_tools.php');
+    require_once '../../auth/login_tools.php';
     load();
 }
 
+require_once '../../auth/login_tools.php';
 require_once '../../config/connect_site_db.php';
+
+$checked = checkPermissions($dbc,$_SESSION['user_id']);
+$page_title = 'Forum';
+include_once '../../includes/header.php';
 
 $q = "SELECT * FROM forum";
 $r = mysqli_query($dbc,$q);

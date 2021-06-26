@@ -10,7 +10,7 @@
         
         if($checked != 'admin')
         {
-            load('/home.php');
+            load('home.php');
         }
 
         if($_SERVER['REQUEST_METHOD'] == 'POST')

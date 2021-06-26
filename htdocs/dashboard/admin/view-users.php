@@ -11,13 +11,10 @@
         require_once '../../../config/connect_site_db.php';
         require_once '../../../auth/login_tools.php';
         $checked = checkPermissions($dbc,$_SESSION['user_id']);
+        if($checked != 'admin')load('home.php');
+        $page_title = 'View users';
         include_once '../../../includes/header.php';
-        
     }
-
-    
-
-    
 ?>
 <div class="row">
     <h4>Users list</h4>
