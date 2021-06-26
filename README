@@ -1,0 +1,13 @@
+CovidHelper is a solution to help small to medium sized medical institutions to keep a record of patient Covid-19 vaccinations.
+If you work in a location that at least has access to a reasonably basic PC or Linux computer and have, somewhere, the ability to download from the Internet - then you can use CovidHelper.
+
+CovidHelper is designed for medical institutions that need a quick resource that is realiable and easy to use.
+
+Features include:
+- Automatic database setup (requires the initial creation of one database)
+- Permissions to control access to records and protected system pages
+- Written in PHP, HTML and JavaScript: no complicated technologies or frameworks that are hard to learn or maintain
+- Uses MySQL
+- Can be run locally on a single computer, if needed
+
+CovidHelper is currently in development.
