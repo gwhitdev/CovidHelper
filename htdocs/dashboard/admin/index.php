@@ -57,16 +57,3 @@ include_once '../../../includes/header.php';
 </div>
 
 <?php include_once '../../../includes/footer.php' ?>
-<script>
-    const clearPatientSearchButton = document.getElementById('clearPatientSearch');
-    const patientSearchForm = document.getElementById('patientSearchForm');
-    
-    function clearForm(form) {
-        console.log('click');
-        form.reset();
-    }
-
-    clearPatientSearchButton.addEventListener('click',() => clearForm(patientSearchForm));
-    
-    
-</script>
