@@ -2,7 +2,8 @@
 <?php
 
 session_start();
-
+$page_title = 'Forum';
+include_once '../../includes/header.php';
 if(!isset($_SESSION['user_id']))
 {
     require_once('../..login_tools.phplogin_tools.php');
@@ -29,8 +30,7 @@ else
 {
     echo '<p>There are currently no messages.';
 }
-$page_title = 'Forum';
-include_once '../../includes/header.php';
+
 ?>
 <div class="row">
 <a href="post.php">Post message</a> 

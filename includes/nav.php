@@ -12,7 +12,10 @@
           <a class="nav-link active" aria-current="page" href="/home.php">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/dashboard">Dashboard</a>
+          <a class="nav-link" href="/dashboard/admin">Admin</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/dashboard">Your Dashboard</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="/forum/forum.php">Forum</a>
