@@ -8,7 +8,7 @@ if(!isset($_SESSION['user_id']))
     load();
 
 }
-if(isset($_SESSION))
+if(isset($_SESSION['user_id']))
 {
     require_once '../../../auth/login_tools.php';
     require_once '../../../config/connect_site_db.php';
@@ -35,6 +35,7 @@ include_once '../../../includes/header.php';
     <div class="row"style="margin-top:25px;margin-bottom:25px">
             <div class="col-sm-12">
                 <a class="btn btn-lg btn-primary"href="/dashboard/admin/news.php">Add latest news</a>
+                <a class="btn btn-lg btn-primary"href="/dashboard/admin/new-user.php">Create new user</a>
             </div>
         </div>
         <div class="row">

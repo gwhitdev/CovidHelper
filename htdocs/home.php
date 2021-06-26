@@ -5,9 +5,6 @@ if(!isset($_SESSION['user_id']))
 {
     require_once '../auth/login_tools.php';
     load();
-    //$checked = checkPermissions($dbc,$_SESSION['user_id']);
-
-    
 }
 if(isset($_SESSION['user_id']))
 {

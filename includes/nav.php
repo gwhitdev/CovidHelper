@@ -1,15 +1,6 @@
 <?php 
-session_start();
+//session_start();
   
-  /*
-  if(isset($_SESSION['user_id']))
-  {
-    require_once '../config/connect_site_db.php'; 
-  require_once '../auth/login_tools.php'; 
-    $checked = checkPermissions($dbc,$_SESSION['user_id']);
-
-  }
-  */
 ?>
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
