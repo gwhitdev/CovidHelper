@@ -32,12 +32,18 @@ include_once '../../../includes/header.php';
 <div class="row">
     <!-- Left column -->
     <div class="col-sm-12 col-md-6">
-    <div class="row"style="margin-top:25px;margin-bottom:25px">
+        <div class="row"style="margin-top:25px;margin-bottom:25px">
             <div class="col-sm-12">
                 <a class="btn btn-lg btn-primary"href="/dashboard/admin/news.php">Add latest news</a>
-                <a class="btn btn-lg btn-primary"href="/dashboard/admin/new-user.php">Create new user</a>
+                    
             </div>
         </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <a class="btn btn-lg btn-primary"href="/dashboard/admin/new-user.php">Create new user</a>
+                <a class="btn btn-lg btn-primary"href="/dashboard/admin/view-users.php">View all users</a>
+            </div>
+         </div>
         <div class="row">
             <div class="col-sm-12">
                 FORM
