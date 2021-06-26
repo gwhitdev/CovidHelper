@@ -11,10 +11,24 @@ function load($page = 'login.php')
 }
 function checkPermissions($dbc,$user_id)
 {
-    $q = "SELECT user_type FROM users WHERE user_id = $user_id AND user_type = 'admin' OR user_type = 'medical'";
+    $q = "SELECT user_type FROM users WHERE user_id = '$user_id'";
     $r = $dbc->query($q);
-    if(mysqli_num_rows($r) == 0) return 'Not authorised';
-    return 'Authorised';
+    $r;
+    if(mysqli_num_rows($r) > 0)
+    {
+       while($row = mysqli_fetch_assoc($r))
+      {
+      if($row['user_type'] == 'admin') return 'admin';
+      if($row['user_type'] == 'user') return 'user';
+      if($row['user_type'] == 'medical') return 'medical';
+      }
+       
+    }
+   else
+   {
+      return 'Not authorised';
+   }
+    
 }
 function validate($dbc,$email='',$pwd='')
 {

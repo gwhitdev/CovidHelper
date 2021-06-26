@@ -6,7 +6,8 @@ if(isset($_SESSION['user_id']))
 {
     $user_id = $_SESSION['user_id'];
     $authorised = checkPermissions($dbc,$user_id);
-    if($authorised == 'Authorised') load('dashboard/house');
+    if($authorised == 'admin' || $authorised == 'medical') load('dashboard/house');
+    
 }
 
 if(!isset($_SESSION['user_id']))

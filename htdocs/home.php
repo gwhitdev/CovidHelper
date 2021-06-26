@@ -5,6 +5,15 @@ if(!isset($_SESSION['user_id']))
 {
     require_once '../auth/login_tools.php';
     load();
+    //$checked = checkPermissions($dbc,$_SESSION['user_id']);
+
+    
+}
+if(isset($_SESSION['user_id']))
+{
+    require_once '../config/connect_site_db.php';
+    require_once '../auth/login_tools.php';
+    $checked = checkPermissions($dbc,$_SESSION['user_id']);
 }
 $page_title = 'Home';
 include_once '../includes/header.php';
@@ -19,7 +28,7 @@ include_once '../includes/header.php';
 
 <div class="row">
     
-    
+    <?php print_r($checked);?>
 </div>
 
 <?php include_once '../includes/footer.php' ?>

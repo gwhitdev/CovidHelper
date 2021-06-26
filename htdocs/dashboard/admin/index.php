@@ -14,7 +14,10 @@ if(isset($_SESSION))
     require_once '../../../config/connect_site_db.php';
     $user_id = $_SESSION['user_id'];
     $checked = checkPermissions($dbc,$user_id);
-    if($checked == 'Not authorised') load('home.php');
+    if($checked == 'Not authorised'){
+        load('home.php');
+    }
+    
 }
 
 $page_title = 'Admin and Medical Dashboard';
