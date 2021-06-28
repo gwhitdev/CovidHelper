@@ -88,9 +88,9 @@ function addTestPatientData($dbc,$res)
     if($res)
     {
         $test_patient = "INSERT INTO patients(
-            patient_first_name,patient_last_name,patient_email,patient_post_code,patient_username,patient_dob)
+            patient_first_name,patient_last_name,patient_email,patient_postcode,patient_dob,patient_notes,date_created)
             VALUES (
-            'Test First Name','Test Last Name','testpatient@test.com','LL1 1LL','testuser','1986-06-01');";
+            'Test First Name','Test Last Name','testpatient@test.com','LL1 1LL','1986-06-01','Test notes',NOW());";
         $insert_test_patient = $dbc->query($test_patient);
         $test_patient_insert_confirmed = mysqli_num_rows($insert_test_patient);
         if($test_patient_insert_confirmed)
@@ -106,10 +106,13 @@ function createPatientsTable($dbc)
     patient_id              INT UNSIGNED NOT NULL AUTO_INCREMENT,
     patient_first_name      VARCHAR(40) NOT NULL,
     patient_last_name       VARCHAR(60) NOT NULL,
-    patient_email           VARCHAR(20) NOT NULL,
-    patient_post_code       VARCHAR(10) NOT NULL,
-    patient_username       VARCHAR(20) NOT NULL,
+    patient_email           VARCHAR(50) NOT NULL,
+    patient_postcode        VARCHAR(50) NOT NULL,
     patient_dob             DATE NOT NULL,
+    vaccination_one         DATE,
+    vaccination_two         DATE,
+    patient_notes           TEXT,
+    date_created            DATE NOT NULL,
     user_id                 INT UNSIGNED,
     PRIMARY KEY (patient_id),
     FOREIGN KEY (user_id) REFERENCES users(user_id),

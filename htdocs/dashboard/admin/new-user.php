@@ -96,27 +96,33 @@
                     mysqli_close($dbc);
                     exit();
                 }
-                else
-                {
-                    echo '<h1>Error!</h1>
-                    <p id="err_msg">The following error(s) occurred:<br>';
-                    foreach($errors as $error)
-                    {
-                        echo " - $error<br>";
-                    }
-                    echo 'Please try again.</p>';
-                    mysqli_close($dbc);
-                }
             }
-        }
-        $page_title = 'Register';
-        include_once '../../../includes/header.php';
+            
+        
+       
     }
+    $page_title = 'Register';
+    include_once '../../../includes/header.php';
 ?>
 <div class="row">
     <h1>Create new user</h1>
 </div>
 <div class="row">
+<?php
+if(!empty($errors))
+{
+    echo '<h2>Error!</h2>
+    <p id="err_msg">The following error(s) occurred:<br>';
+    foreach($errors as $error)
+    {
+       echo " - $error<br>";
+    }
+    echo 'Please try again.</p>';
+    mysqli_close($dbc);
+    }
+}
+
+?>
 <form action="new-user.php" method="POST">
     <p>
         First name: <input type="text" name="first_name" value="<?php if(isset($_POST['first_name'])) echo $_POST['first_name']; ?>"><br>
