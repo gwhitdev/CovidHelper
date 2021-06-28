@@ -4,6 +4,7 @@
     {
         $patient_id = $_GET['id'];
     }
+    //ADD CHECKED
     $page_title = 'Patient Detail';
     include_once '../../../includes/header.php';
 ?>

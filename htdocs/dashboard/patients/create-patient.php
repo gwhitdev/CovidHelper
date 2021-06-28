@@ -1,8 +1,6 @@
 <?php
 
-use Symfony\Component\Mime\Test\Constraint\EmailHtmlBodyContains;
-
-session_start();
+    session_start();
     require_once '../../../config/connect_site_db.php';    
     if(isset($_SESSION['user_id']))
     {
@@ -104,8 +102,6 @@ session_start();
 
             if(empty($errors))
             {
-                /*$q = "INSERT INTO patients (patient_first_name,patient_last_name,patient_email,patient_postcode,patient_dob,vaccination_one,vaccination_two,patient_notes,date_created) 
-                        VALUES ('$fn','$ln','$e','$pc','$dob','$v1','$v2','$notes',NOW());";*/
                 $q = "INSERT INTO patients (patient_first_name,patient_last_name,patient_email,patient_postcode,patient_dob,vaccination_one,vaccination_two,patient_notes,date_created)
                 VALUES ('$fn','$ln','$e','$pc','$dob','$v1','$v2','$notes',NOW())";
                 $r = mysqli_query($dbc,$q);
@@ -123,7 +119,7 @@ session_start();
                 else
                 {
                     array_push($errors, 'Error!');
-                    array_push($errors, "$fn,$ln,$e,$pc,$dob,$v1,$v2,$notes");
+                    //array_push($errors, "$fn,$ln,$e,$pc,$dob,$v1,$v2,$notes");
                 }
             }
         }
