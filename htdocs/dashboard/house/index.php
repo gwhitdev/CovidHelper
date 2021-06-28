@@ -76,7 +76,7 @@ include_once '../../../includes/header.php';
         
     </div>
     </div>
-    <div class="row justify-content-center"style="margin-top:15px">
+    <div class="row justify-content-center text-center"style="margin-top:15px">
         <div class="col-sm-12 col-md-6">
         <?php 
             if($_SERVER['REQUEST_METHOD'] == 'POST')
@@ -87,7 +87,7 @@ include_once '../../../includes/header.php';
                     echo '<ul class="list-group list-group-flush">';
                     while($row = mysqli_fetch_assoc($response))
                     {
-                        echo '<li class="list-group-item">' .$row['patient_first_name'] . '<a style="margin-left:5px" class="btn btn-sm btn-outline-dark" href="/patients/update.php?id='.$row['patient_id'].'">Update</a>';
+                        echo "<li class='list-group-item'>ID: {$row['patient_id']} <a href='/dashboard/patients/patient.php?id={$row['patient_id']}'>{$row['patient_first_name']} {$row['patient_last_name']}</a> (Created: {$row['date_created']})";
                         
                     }
                     echo '</ul>';
