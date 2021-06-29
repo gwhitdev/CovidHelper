@@ -105,8 +105,45 @@
                 $q = "INSERT INTO patients (patient_first_name,patient_last_name,patient_email,patient_postcode,patient_dob,vaccination_one,vaccination_two,patient_notes,date_created)
                 VALUES ('$fn','$ln','$e','$pc','$dob','$v1','$v2','$notes',NOW())";
                 $r = mysqli_query($dbc,$q);
-
+                $audit_updated = false;
                 if($r)
+                {
+                    $audit_user_id = $_SESSION['user_id'];
+                    $patient_id_query = "SELECT patient_id FROM patients WHERE patient_email = '$e'";
+                    $get_patient_id = $dbc->query($patient_id_query);
+                    $num = mysqli_num_rows($get_patient_id);
+                    if($num > 0)
+                    {
+                        $patient = mysqli_fetch_assoc($get_patient_id);
+                        $audit_patient_id = $patient['patient_id'];
+                        $audit = "INSERT INTO patient_audit (activity,activity_date,patient_id,user_id)
+                            VALUES ('Created new patient',NOW(),'$audit_patient_id','$audit_user_id')";
+                        $insert_audit_activity = $dbc->query($audit);
+                        if(mysqli_affected_rows($dbc) == 1)
+                        {
+                            $audit_entry_added = 'Successfully added audit entry';
+                            $audit_updated = true;
+                        }
+                        else
+                        {
+                            array_push($errors, 'There was a problem adding the audit entry');
+                            $roll_back_entry = "DELETE FROM patients WHERE patient_email = '$e'";
+                            $delete_query = $dbc->query($roll_back_entry);
+                            $rows_affected = mysqli_affected_rows($dbc);
+                            if($rows_affected == 1)
+                            {
+                                array_push($errors, 'New patient entry attempt rolled back, please try again.');
+                            }
+                            else
+                            {
+                                array_push($errors, "Patient created, audit not updated, could not roll back the created patient. Please contact your database administrator.");
+                            }
+                            
+                        }
+                    }
+
+                }
+                if($r && $audit_updated)
                 {
                     $success_string = "<h1>Created!</h1><p>The new patient record has been created.</p>";
                     $page_title = 'Success!';
