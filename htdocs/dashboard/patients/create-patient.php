@@ -3,6 +3,7 @@
     session_start();
     require_once '../../../config/connect_site_db.php';  
     require_once '../../../audit/audit-tasks.php';
+    require_once '../../../validators/patient-validator.php';
 
     if(isset($_SESSION['user_id']))
     {
@@ -18,71 +19,23 @@
         if($_SERVER['REQUEST_METHOD'] == 'POST')
         {
             $errors = array();
-            if(empty($_POST['patient_first_name']))
-            {
-                array_push($errors,'Enter your first name');
-            }
-            else
-            {
-                $fn = mysqli_real_escape_string($dbc,trim($_POST['patient_first_name']));
-            }
+            
+            list ($fn_error, $fn) = validatePatientFirstName($dbc, $_POST['patient_first_name']);
+            list ($ln_error, $ln) = validatePatientLastName($dbc, $_POST['patient_last_name']);
+            list ($e_error, $e) = validatePatientEmail($dbc,$_POST['patient_email']);
+            list ($pc_error, $pc) = validatePatientPostCode($dbc,$_POST['patient_postcode']);
+            list ($dob_error, $dob) = validatePatientDob($dbc,$_POST['patient_dob']);
+            $v1 = validatePatientVaccinationOne($dbc,$_POST['vaccination_one']);
+            $v2 = validatePatientVaccinationTwo($dbc,$_POST['vaccination_two']);
+            $notes = validatePatientNotes($dbc,$_POST['patient_notes']);
 
-            if(empty($_POST['patient_last_name']))
+            $errors_array = array($fn_error,$ln_error,$e_error,$pc_error,$dob_error);
+            foreach($errors_array as $err)
             {
-                array_push($errors,'Enter your last name');
+                if($err != '') array_push($errors,$err);
             }
-            else 
-            {
-                $ln = mysqli_real_escape_string($dbc,trim($_POST['patient_last_name']));
-            }
-
-            if(empty($_POST['patient_email']))
-            {
-                array_push($errors,'Enter your email address');
-            }
-            else
-            {
-                $e = mysqli_real_escape_string($dbc,trim($_POST['patient_email']));
-            }
-
-            if(empty($_POST['vaccination_one']))
-            {
-                $v1 = '0000-01-01';
-            }
-            else
-            {
-                $v1 = mysqli_real_escape_string($dbc,trim($_POST['vaccination_one']));
-                
-            }
-            if(empty($_POST['vaccination_two']))
-            {
-                $v2 = '0000-01-01';
-            }
-            else
-            {
-                $v2 = mysqli_real_escape_string($dbc,trim($_POST['vaccination_two']));
-                
-            }
-            if(empty($_POST['patient_notes']))
-            {
-                $notes = '';
-            }
-            else
-            {
-                $notes = mysqli_real_escape_string($dbc,trim($_POST['patient_notes']));
-                
-            }
-            if(empty($_POST['patient_postcode']))
-            {
-                array_push($errors,'Please provide a post code');
-            }
-            else
-            {
-                $pc = mysqli_real_escape_string($dbc,trim($_POST['patient_postcode']));
-                
-            }
-
-            if(empty($_POST['patient_dob']))
+           
+            /*if(empty($_POST['patient_dob']))
             {
                 array_push($errors,'Please provide a date of birth for the patient.');
             }
@@ -90,7 +43,7 @@
             {
                 $dob = mysqli_real_escape_string($dbc,trim($_POST['patient_dob']));
                 
-            }
+            }*/
 
             if(empty($errors))
             {
