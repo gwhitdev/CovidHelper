@@ -34,16 +34,6 @@
             {
                 if($err != '') array_push($errors,$err);
             }
-           
-            /*if(empty($_POST['patient_dob']))
-            {
-                array_push($errors,'Please provide a date of birth for the patient.');
-            }
-            else
-            {
-                $dob = mysqli_real_escape_string($dbc,trim($_POST['patient_dob']));
-                
-            }*/
 
             if(empty($errors))
             {
