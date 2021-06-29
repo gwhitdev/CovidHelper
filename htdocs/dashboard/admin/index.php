@@ -46,7 +46,7 @@ include_once '../../../includes/header.php';
          </div>
         <div class="row">
             <div class="col-sm-12">
-                <!-- PLACEHOLDER -->
+               
             </div>
         </div>
         
@@ -58,7 +58,21 @@ include_once '../../../includes/header.php';
     </div>
     <!-- Right column -->
     <div class="col text-center"style="margin-top:15px">
-        <h3>Activity Feed</h3>
+        <h3>Recent Activity Feed</h3>
+        <div class="row">
+            <div class="col-sm-12">
+            <?php $q = "SELECT * FROM patient_audit ORDER BY activity_date DESC LIMIT 10"; $res = $dbc->query($q);?>
+                <ul class="list-group">
+                <?php
+                    while($row = mysqli_fetch_assoc($res))
+                    {
+                        $date = strtotime($row['activity_date']);
+                        echo '<li class="list-group-item">'. date("D, d M Y H:m",$date). ' >> ' .$row['activity'] . '</li>';
+                    }
+                ?>
+                </ul>
+            </div>
+        </div>
     </div>
 </div>
 
