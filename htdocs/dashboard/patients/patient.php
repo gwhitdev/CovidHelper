@@ -46,8 +46,8 @@
 
 <div class="row justify-content center" style="margin-top:25px">
     <div class="col-sm-12">
-        <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Delete</button>
-        <a class="btn btn-sm btn-primary" href="update-patient.php?id=<?php echo $patient_id ?>">Update</a>
+        <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop"><i class='bi bi-x-circle-fill 'data-bs-toggle='tooltip' data-bs-placement='left'title='Delete user'></i> Delete</button>
+        <a class="btn btn-sm btn-primary" href="update-patient.php?id=<?php echo $patient_id ?>"><i class='bi bi-arrow-repeat ' data-bs-toggle='tooltip' data-bs-placement='right'title='Update user'></i> Update</a>
     </div>
     
 </div>
