@@ -22,7 +22,7 @@ if(isset($_SESSION['user_id']))
         $last_name = $_POST['patient_last_name'];
         $dob = $_POST['patient_dob'];
 
-        $search_query = "SELECT * FROM patients WHERE patient_last_name LIKE '$last_name' OR patient_first_name LIKE '$first_name'";
+        $search_query = "SELECT * FROM patients WHERE patient_last_name LIKE '$last_name' OR patient_first_name LIKE '$first_name' AND WHERE delete = false";
         $response = $dbc->query($search_query);
         $rows = mysqli_num_rows($response);
         

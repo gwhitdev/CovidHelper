@@ -46,7 +46,7 @@
 
 <div class="row justify-content center" style="margin-top:25px">
     <div class="col-sm-12">
-        <button class="btn btn-sm btn-danger">Delete</button>
+        <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Delete</button>
         <a class="btn btn-sm btn-primary" href="update-patient.php?id=<?php echo $patient_id ?>">Update</a>
     </div>
     
@@ -81,7 +81,24 @@
     </div>
     
 </div>
-
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Delete patient record</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Are you sure you want to delete this record?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <a href="/dashboard/patients/delete-record.php?id=<?php echo $patient_id?>" type="button" class="btn btn-danger">Delete record</a>
+      </div>
+    </div>
+  </div>
+</div>
 <?php
 
 include_once '../../../includes/footer.php';
