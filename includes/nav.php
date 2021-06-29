@@ -20,9 +20,7 @@
         <li class="nav-item">
             <a class="nav-link" href="/dashboard">Your Dashboard</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/forum/forum.php">Forum</a>
-          </li>';
+         ';
         }
         if($checked == 'admin') 
         {

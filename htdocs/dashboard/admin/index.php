@@ -34,7 +34,7 @@ include_once '../../../includes/header.php';
     <div class="col-sm-12 col-md-6"style="margin-top:15px">
         <div class="row text-center justify-content-center"style="margin-top:25px;margin-bottom:25px">
             <div class="col-sm-12 col-md-6 d-grid gap-2">
-                <a class="btn btn-lg btn-primary"href="/dashboard/admin/news.php"><i class="bi bi-newspaper"></i> Add latest news</a>
+                <!--<a class="btn btn-lg btn-primary"href="/dashboard/admin/news.php"><i class="bi bi-newspaper"></i> Add latest news</a>-->
                     
             </div>
         </div>
