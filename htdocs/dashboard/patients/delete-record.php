@@ -19,6 +19,7 @@
 
         if($_SERVER['REQUEST_METHOD'] == 'GET')
         {
+            
             $errors = array();
             $id_to_delete = $_GET['id'];
             $user_id = $_SESSION['user_id'];
@@ -26,12 +27,13 @@
             echo "id: $id_to_delete";
 
             $query = "UPDATE patients SET deleted = true WHERE patient_id = $id_to_delete";
-            $markedToDelete = $dbc->query($query);
-            if($markedToDelete)
+            $dbc->query($query);
+            if(mysqli_affected_rows($dbc) > 0)
             {
                 applyPatientAuditActivity($dbc,$user_id,$id_to_delete,'Patient record marked to delete');
                 $success_string = 'User deleted';
                 echo $success_string;
+                load("/dashboard/index.php?success=$success_string");
                 $dbc->close();
             }
             else
@@ -44,6 +46,7 @@
                     echo $err;
                 }
                 $dbc->close();
+                load("/dashboard/patients/patient.php?id=$id_to_delete");
             }
         }
 
