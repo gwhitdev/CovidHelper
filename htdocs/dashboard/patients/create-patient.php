@@ -1,7 +1,9 @@
 <?php
 
     session_start();
-    require_once '../../../config/connect_site_db.php';    
+    require_once '../../../config/connect_site_db.php';  
+    require_once '../../../audit/audit-tasks.php';
+
     if(isset($_SESSION['user_id']))
     {
         
@@ -116,13 +118,12 @@
                     {
                         $patient = mysqli_fetch_assoc($get_patient_id);
                         $audit_patient_id = $patient['patient_id'];
-                        $audit = "INSERT INTO patient_audit (activity,activity_date,patient_id,user_id)
-                            VALUES ('Created new patient',NOW(),'$audit_patient_id','$audit_user_id')";
-                        $insert_audit_activity = $dbc->query($audit);
+                        applyPatientAuditActivity($dbc,$audit_user_id,$audit_patient_id,'New patient created');
                         if(mysqli_affected_rows($dbc) == 1)
                         {
                             $audit_entry_added = 'Successfully added audit entry';
                             $audit_updated = true;
+                            $dbc->close();
                         }
                         else
                         {
@@ -130,6 +131,7 @@
                             $roll_back_entry = "DELETE FROM patients WHERE patient_email = '$e'";
                             $delete_query = $dbc->query($roll_back_entry);
                             $rows_affected = mysqli_affected_rows($dbc);
+                            $dbc->close();                            
                             if($rows_affected == 1)
                             {
                                 array_push($errors, 'New patient entry attempt rolled back, please try again.');
@@ -138,7 +140,6 @@
                             {
                                 array_push($errors, "Patient created, audit not updated, could not roll back the created patient. Please contact your database administrator.");
                             }
-                            
                         }
                     }
 
