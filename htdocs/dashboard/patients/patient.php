@@ -47,7 +47,7 @@
 <div class="row justify-content center" style="margin-top:25px">
     <div class="col-sm-12">
         <button class="btn btn-sm btn-danger">Delete</button>
-        <button class="btn btn-sm btn-primary">Update</button>
+        <a class="btn btn-sm btn-primary" href="update-patient.php?id=<?php echo $patient_id ?>">Update</a>
     </div>
     
 </div>
