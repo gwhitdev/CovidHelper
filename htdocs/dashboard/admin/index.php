@@ -5,6 +5,7 @@
     require_once '../../../auth/account_class.php';
     include_once '../../actions/account-action.php';
     $errors = array();
+    if(!isset($_SESSION['user_id'])) header('Location: /login.php');
     $page_title = 'Admin and Medical Dashboard';
     include_once '../../../includes/header.php';
 ?>

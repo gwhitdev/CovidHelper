@@ -1,4 +1,10 @@
 <?php 
+  if(isset($_SESSION['user_id']))
+  {
+    $authenticated = TRUE;
+    $user_role = $_SESSION['user_type'];
+  }
+
 ?>
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -20,7 +26,7 @@
           </li>
          ';
         }
-        if($authenticated) 
+        if($user_role == 'admin') 
         {
           echo '
           <li class="nav-item">
@@ -38,7 +44,7 @@
         else
         {
           echo "Welcome, {$_SESSION['first_name']}";
-          echo '<a class="nav-link" href="/goodbye.php"><button class="btn btn-sm btn-outline btn-success"><i class="bi bi-door-closed-fill"></i> Logout</button></a>';
+          echo '<a class="nav-link" href="/goodbye.php"><button class="btn btn-sm btn-outline btn-danger"><i class="bi bi-door-closed-fill"></i> Logout</button></a>';
         }
         ?>
         

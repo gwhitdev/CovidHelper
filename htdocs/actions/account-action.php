@@ -1,6 +1,5 @@
 <?php
 
-//    require_once '../../auth/account_class.php';
     $loggedIn = FALSE;
     $account = new Account();
     if(!$loggedIn)

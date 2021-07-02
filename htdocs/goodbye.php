@@ -5,7 +5,9 @@
    include 'actions/account-action.php';
    try
    {
+   
         $account->LogOut();
+        session_destroy();
         header('Location: /');
    }
    catch (Exception $e)
@@ -14,6 +16,5 @@
        die();
    }
    
-   include_once 'header.php'; 
-   include 'nav.php';
+   
 ?>
