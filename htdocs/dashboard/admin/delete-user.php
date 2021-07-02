@@ -1,16 +1,11 @@
 <?php
     session_start();
-    if(!isset($_SESSION['user_id']))
-    {
-        require_once '../../../auth/login_tools.php';
-        load();
-    }
-    
     require_once '../../../config/connect_site_db.php';
-    require_once '../../../auth/login_tools.php';
-    $checked = checkPermissions($dbc,$_SESSION['user_id']);
-    if($checked != 'admin') load('home.php');
-    
+    require_once '../../../auth/account_class.php';
+    include_once '../../actions/account-action.php';
+    $errors = array();
+    if(!isset($_SESSION['user_id'])) header('Location: /login.php');
+    if(isset($_SESSION['user_id']) && $_SESSION['user_type'] != 'admin') header('Location: /home.php');
     $page_title = 'Delete user account';
     include_once '../../../includes/header.php';
     
@@ -25,17 +20,19 @@
         }
         if($user_id != $id_to_delete)
         {
-            $user_to_delete = "DELETE FROM users WHERE user_id = $id_to_delete";
-            $res = $dbc->query($user_to_delete);
-            if(mysqli_affected_rows($dbc) > 0)
+            $user_to_delete = "DELETE FROM users WHERE user_id = :id_to_delete";
+            $res = $pdo->prepare($user_to_delete);
+            $values = array(':id_to_delete'=>$id_to_delete);
+            $res->execute($values);
+            if($res->rowCount() > 0)
             {
-                load('dashboard/admin/view-users.php');
+                header('Location: view-users.php');
             }
-            if(mysqli_affected_rows($dbc) == 0)
+            if($res->rowCount() == 0)
             {
                 array_push($errors,"Deleting user $id_to_delete didn't work.<br>Please <a href='/dashboard/admin/view-users.php'>go back</a> and try again.");
             }
-            $dbc->close();
+            die();
         }
     }
 

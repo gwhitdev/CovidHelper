@@ -46,7 +46,7 @@
     {
         include_once '../../../includes/header.php';
         echo 'Success!';
-        echo $newId;
+        echo "New user created with ID: $newId";
         include_once '../../../includes/footer.php';
     }
     else

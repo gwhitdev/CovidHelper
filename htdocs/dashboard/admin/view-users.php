@@ -1,20 +1,13 @@
 <?php
     session_start();
-    if(!isset($_SESSION['user_id']))
-    {
-        session_start();
-        require_once '../../../auth/login_tools.php';
-        load();
-    }
-    if(isset($_SESSION['user_id']))
-    {
-        require_once '../../../config/connect_site_db.php';
-        require_once '../../../auth/login_tools.php';
-        $checked = checkPermissions($dbc,$_SESSION['user_id']);
-        if($checked != 'admin')load('home.php');
-        $page_title = 'View users';
-        include_once '../../../includes/header.php';
-    }
+    require_once '../../../config/connect_site_db.php';
+    require_once '../../../auth/account_class.php';
+    include_once '../../actions/account-action.php';
+    $errors = array();
+    if(!isset($_SESSION['user_id'])) header('Location: /login.php');
+    if(isset($_SESSION['user_id']) && $_SESSION['user_type'] != 'admin') header('Location: /home.php');
+    $page_title = 'View Users';
+    include_once '../../../includes/header.php';
 ?>
 <div class="row">
     <div class="col-sm-12 col-md-6">
@@ -36,14 +29,14 @@
             </thead>
             <tbody>
             <?php 
-                if($checked == 'admin')
-                {
+            
                     $query = "SELECT * FROM users";
-                    $r = $dbc->query($query);
-                    $num_of_rows = mysqli_num_rows($r);
+                    $r = $pdo->prepare($query);
+                    $r->execute();
+                    $num_of_rows = $r->rowCount();
                     if($num_of_rows > 0)
                     {
-                        while($user = mysqli_fetch_assoc($r))
+                        while($user = $r->fetch(PDO::FETCH_ASSOC))
                         {
                             echo "<tr><td>{$user['user_id']}</td><td>{$user['first_name']} {$user['last_name']} </td><td>{$user['user_type']}</td>";
                             echo "<td><a  href='delete-user.php?id={$user['user_id']}'><i class='bi bi-x-circle-fill text-danger'data-bs-toggle='tooltip' data-bs-placement='left'title='Delete user'></i></a>&nbsp;";
@@ -51,7 +44,6 @@
                             echo "</td></tr>";
                         }
                     }
-                }
             ?>
             </tbody>
             <tfoot class="table-dark">

@@ -1,5 +1,5 @@
 <?php
-
+    global $pdo;
     $loggedIn = FALSE;
     $account = new Account();
     if(!$loggedIn)
