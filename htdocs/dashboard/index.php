@@ -7,8 +7,8 @@
 
     if(isset($_SESSION))
     {
-        if($_SESSION['user_type'] == 'admin') header('Location: /dashboard/admin/');
-        if($_SESSION['user_type'] == 'medical') header('Location: /dashboard/house/');
+        $user_type = $_SESSION['user_type'];
+        if($user_type == 'admin' || $user_type == 'medical') header('Location: /dashboard/house/');
     }
     else
     {

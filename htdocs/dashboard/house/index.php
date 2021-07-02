@@ -1,33 +1,25 @@
 <?php
 
-session_start();
-
-if(!isset($_SESSION['user_id']))
-{
-    require_once '../../../auth/login_tools.php';
-    load();
-
-}
-if(isset($_SESSION['user_id']))
-{
-    require_once '../../../auth/login_tools.php';
+    session_start();
     require_once '../../../config/connect_site_db.php';
-    $user_id = $_SESSION['user_id'];
-    $checked = checkPermissions($dbc,$user_id);
-    if($checked == 'Not authorised') load('home.php');
+    require_once '../../../auth/account_class.php';
+    include_once '../../actions/account-action.php';
+    $errors = array();
 
     if($_SERVER['REQUEST_METHOD'] == 'POST')
     {
+        global $pdo;
         $first_name = $_POST['patient_first_name'];
         $last_name = $_POST['patient_last_name'];
         $dob = $_POST['patient_dob'];
 
-        $search_query = "SELECT * FROM patients WHERE deleted = 0 AND (patient_last_name LIKE '$last_name' OR patient_first_name LIKE '$first_name') ";
-        $response = $dbc->query($search_query);
-        $rows = mysqli_num_rows($response);
+        $search_query = "SELECT * FROM patients WHERE deleted = 0 AND (patient_last_name LIKE :last_name OR patient_first_name LIKE :first_name)";
+        $values = array(':last_name' => $last_name, ':first_name' => $first_name);
+        $response = $pdo->prepare($search_query);
+        $response->execute($values);
+        $rows = $response->rowCount();
         
     }
-}
 
 $page_title = 'Admin and Medical Dashboard';
 include_once '../../../includes/header.php';
@@ -84,7 +76,7 @@ include_once '../../../includes/header.php';
                 if($rows > 0)
                 {
                     echo '<ul class="list-group list-group-flush">';
-                    while($row = mysqli_fetch_assoc($response))
+                    while($row = $response->fetch(PDO::FETCH_ASSOC))
                     {
                         echo "<li class='list-group-item'>ID: {$row['patient_id']} <a href='/dashboard/patients/patient.php?id={$row['patient_id']}'>{$row['patient_first_name']} {$row['patient_last_name']}</a> (Created: {$row['date_created']})";
                         
