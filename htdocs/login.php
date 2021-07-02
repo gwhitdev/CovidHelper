@@ -1,6 +1,11 @@
 <?php 
-$page_title = 'Login';
-include '../includes/header.php';
+    session_start();
+    require_once '../config/connect_site_db.php';
+    require_once '../auth/account_class.php';
+    include_once 'actions/account-action.php';
+    $errors = array();
+    $page_title = 'Login';
+    include '../includes/header.php';
 ?>
 
 <div class="row text-center">
@@ -9,27 +14,37 @@ include '../includes/header.php';
     </div>
 </div>
 <?php
-
-if(isset($errors) && !empty($errors))
-{
-    echo '<div class="row justify-content-center text-center"><div class="col-sm-12 col-md-6 col-lg-6">';
-    echo '<p id="err_msg"><h3>Oops! There was a problem</h3><br>';
-    foreach($errors as $msg)
+    if($_SERVER['REQUEST_METHOD'] == 'POST')
     {
-        echo '<p class="alert alert-danger" role="alert">';
-        echo "$msg<br> ";
-        echo '</p>';
+        try
+        {
+            $loggedIn = $account->Login($_POST['email'],$_POST['pass']);
+            header('Location: home.php');
+        }
+        catch (Exception $e)
+        {
+            array_push($errors,$e->getMessage());
+        }
     }
-    echo 'Please try again or <a href="register.php">register</a></p>';
-    echo '</div></div>';
-}
+    if(isset($errors) && !empty($errors))
+    {
+        echo '<div class="row justify-content-center text-center"><div class="col-sm-12 col-md-6 col-lg-6">';
+        echo '<p id="err_msg"><h3>Oops! There was a problem</h3><br>';
+        foreach($errors as $msg)
+        {
+            echo '<p class="alert alert-danger" role="alert">';
+            echo "$msg<br> ";
+            echo '</p>';
+        }
+        echo 'Please try again or <a href="register.php">register</a></p>';
+        echo '</div></div>';
+    }
 
 ?>
 
-
 <div class="row justify-content-center">
     <div class="col-sm-12 col-md-6 col-lg-6 ">
-        <form action="../actions/login_action.php"method="POST">
+        <form action="login.php"method="POST">
         <div class="mb-3">
             <label for="emailAddress"class="form-label">Email address:</label>
             <input type="text" name="email"id="emailAddress"class="form-control">
@@ -45,7 +60,6 @@ if(isset($errors) && !empty($errors))
         </form>
     </div>
 </div>
-
 
 
 <?php include '../includes/footer.php'; ?>

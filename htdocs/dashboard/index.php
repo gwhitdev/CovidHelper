@@ -1,21 +1,24 @@
 <?php 
-require_once '../../auth/login_tools.php';
-require_once '../../config/connect_site_db.php';
-session_start();
-if(isset($_SESSION['user_id']))
-{
-    $user_id = $_SESSION['user_id'];
-    $authorised = checkPermissions($dbc,$user_id);
-    if($authorised == 'admin' || $authorised == 'medical') load('dashboard/house');
-    
-}
+    session_start();
+    require_once '../../config/connect_site_db.php';
+    require_once '../../auth/account_class.php';
+    include_once '../actions/account-action.php';
+    $errors = array();
 
-if(!isset($_SESSION['user_id']))
-{
-    load();
-}
-$page_title = 'Admin and Medical Dashboard';
-include_once '../../../includes/header.php';
+    if(isset($_SESSION))
+    {
+        if($_SESSION['user_type'] == 'admin') header('Location: /dashboard/admin/');
+        if($_SESSION['user_type'] == 'medical') header('Location: /dashboard/house/');
+    }
+    else
+    {
+        header('Location: /login.php');
+    }
+
+    $page_title = 'User Dashboard';
+    include_once '../../includes/header.php';
 ?>
+
 <h1>User Dashboard</h1>
+<?php $authenticated ?>
 <?php include '../../includes/footer.php'; ?>

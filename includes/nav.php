@@ -1,6 +1,4 @@
 <?php 
-//session_start();
-  
 ?>
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -12,7 +10,7 @@
       <a class="navbar-brand" href="/">CovidHelper</a>
       
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-      <?php if(isset($_SESSION['user_id'])) {
+      <?php if($authenticated) {
         echo '
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="/home.php">Home</a>
@@ -22,7 +20,7 @@
           </li>
          ';
         }
-        if($checked == 'admin') 
+        if($authenticated) 
         {
           echo '
           <li class="nav-item">
@@ -32,7 +30,7 @@
           
         
       </ul>
-        <?php if(!isset($_SESSION['user_id']))
+        <?php if(!$authenticated)
         {
           
           echo '<a class="nav-link" href="/login.php"><button class="btn btn-sm btn-outline btn-success"><i class="bi bi-door-open-fill"></i> Login</button></a>';

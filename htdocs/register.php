@@ -1,90 +1,48 @@
 <?php
-if($_SERVER['REQUEST_METHOD'] == 'POST')
-{
+    session_start();
     require '../config/connect_users_db.php';
+    require '../auth/account_class.php';
+    include 'actions/account-action.php';
     $errors = array();
-    if(empty($_POST['first_name']))
-    {
-        array_push($errors,'Enter your first name');
-    }
-    else
-    {
-        $fn = mysqli_real_escape_string($dbc,trim($_POST['first_name']));
-    }
+    $page_title ='Register';
 
-    if(empty($_POST['last_name']))
+    if($_SERVER['REQUEST_METHOD'] == 'POST')
     {
-        array_push($errors,'Enter your last name');
-    }
-    else 
-    {
-        $ln = mysqli_real_escape_string($dbc,trim($_POST['last_name']));
-    }
-    if(empty($_POST['email']))
-    {
-        array_push($errors,'Enter your email address');
-    }
-    else
-    {
-        $e = mysqli_real_escape_string($dbc,trim($_POST['email']));
-    }
-
-    if(!empty($_POST['pass1']))
-    {
-        if($_POST['pass1'] != $_POST['pass2'])
+        $account = new Account();
+        $email = $_POST['email'];
+        $password = $_POST['password'];
+        try
         {
-            array_push($errors,'Passwords do not match');
+            $newId = $account->AddAccount($email,$password);
         }
-        else
+        catch (Exception $e)
         {
-            $p = mysqli_real_escape_string($dbc,$_POST['pass1']);
-            $hash = password_hash($p, PASSWORD_DEFAULT);
-            $verify = password_verify($p,$hash);
+            array_push($errors, $e->getMessage());
+            die();
         }
     }
-    else
-    {
-        array_push($errors,'Enter your password.');
-    }
 
-    if(empty($errors))
+    if(!empty($errors))
     {
-        $q = "SELECT user_id FROM users WHERE email='$e'";
-        $r = mysqli_query($dbc,$q);
-        if(mysqli_num_rows($r) != 0)
+        echo '<h1>Error!</h1>
+        <p id="err_msg">The following error(s) occurred:<br>';
+        foreach($errors as $error)
         {
-            array_push($errors,'Email address already registered. <a href="login.php">Please login</a>.');
+            echo " - $error<br>";
         }
-    }
-    if(empty($errors))
-    {
-        $q = "INSERT INTO users (first_name,last_name,email,pass,reg_date) VALUES ('$fn','$ln','$e','$hash',NOW())";
-        $r = mysqli_query($dbc,$q);
-
-        if($r)
-        {
-            echo '<h1>Registered!</h1>
-            <p>You are now registered</p>
-            <p><a href="login.php">Login</a></p>';
-        }
-        mysqli_close($dbc);
-        exit();
+        echo 'Please try again.</p>';
     }
     else
-{
-    echo '<h1>Error!</h1>
-    <p id="err_msg">The following error(s) occurred:<br>';
-    foreach($errors as $error)
-    {
-        echo " - $error<br>";
-    }
-    echo 'Please try again.</p>';
-    mysqli_close($dbc);
-}
-}
+    { ?>
+        <h1>Registered!</h1>
+        <p>You are now registered</p>
+        <p>Please <a href="login.php">login</a></p>
+<?php } ?>
 
-$page_title = 'Register';
-include '../includes/header.php';
+<?php 
+
+    
+    include '../includes/header.php';
 
 ?>
 

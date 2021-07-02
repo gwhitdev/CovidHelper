@@ -1,27 +1,12 @@
 <?php
 
-session_start();
-
-if(!isset($_SESSION['user_id']))
-{
-    require_once '../../../auth/login_tools.php';
-    load();
-
-}
-if(isset($_SESSION['user_id']))
-{
-    require_once '../../../auth/login_tools.php';
+    session_start();
     require_once '../../../config/connect_site_db.php';
-    $user_id = $_SESSION['user_id'];
-    $checked = checkPermissions($dbc,$user_id);
-    if($checked != 'admin'){
-        load('home.php');
-    }
-    
-}
-
-$page_title = 'Admin and Medical Dashboard';
-include_once '../../../includes/header.php';
+    require_once '../../../auth/account_class.php';
+    include_once '../../actions/account-action.php';
+    $errors = array();
+    $page_title = 'Admin and Medical Dashboard';
+    include_once '../../../includes/header.php';
 ?>
 <div class="row text-center">
     <div class="col-sm-12 md-3 lg-3">
@@ -61,10 +46,10 @@ include_once '../../../includes/header.php';
         <h3>Recent Activity Feed</h3>
         <div class="row">
             <div class="col-sm-12">
-            <?php $q = "SELECT * FROM patient_audit ORDER BY activity_date DESC LIMIT 10"; $res = $dbc->query($q);?>
+            <?php global $pdo; $q = "SELECT * FROM patient_audit ORDER BY activity_date DESC LIMIT 10"; $res = $pdo->prepare($q);$res->execute();?>
                 <ul class="list-group">
                 <?php
-                    while($row = mysqli_fetch_assoc($res))
+                    while($row = $res->fetch(PDO::FETCH_ASSOC))
                     {
                         $date = strtotime($row['activity_date']);
                         echo '<li class="list-group-item">'. date("D, d M Y H:m",$date). ' >> ' .$row['activity'] . '</li>';

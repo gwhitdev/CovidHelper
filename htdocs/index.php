@@ -1,5 +1,5 @@
     <?php 
-    session_start();
+        session_start();
         $page_title = 'Welcome'    ;
         include_once '../includes/header.php'; 
     ?>
