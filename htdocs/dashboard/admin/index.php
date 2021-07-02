@@ -1,11 +1,11 @@
 <?php
-
     session_start();
     require_once '../../../config/connect_site_db.php';
     require_once '../../../auth/account_class.php';
     include_once '../../actions/account-action.php';
     $errors = array();
     if(!isset($_SESSION['user_id'])) header('Location: /login.php');
+    if(isset($_SESSION['user_id']) && $_SESSION['user_type'] != 'admin') header('Location: /home.php');
     $page_title = 'Admin and Medical Dashboard';
     include_once '../../../includes/header.php';
 ?>

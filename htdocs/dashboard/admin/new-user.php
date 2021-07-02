@@ -1,145 +1,94 @@
 <?php
 
     session_start();
-    require_once '../../../config/connect_site_db.php';    
-    if(isset($_SESSION['user_id']))
-    {
-        
-        require_once '../../../auth/login_tools.php';
-        $checked = checkPermissions($dbc,$_SESSION['user_id']);
-        
-        if($checked != 'admin')
+    require_once '../../../config/connect_site_db.php';
+    require_once '../../../auth/account_class.php';
+    include_once '../../actions/account-action.php';
+    $errors = array();
+
+    if($_SESSION['user_type'] != 'admin')
         {
-            load('home.php');
+                header('Location: /home.php');
         }
 
-        if($_SERVER['REQUEST_METHOD'] == 'POST')
-        {
-            //require_once '../../../config/connect_users_db.php';
-            $errors = array();
-            if(empty($_POST['first_name']))
-            {
-                array_push($errors,'Enter your first name');
-            }
-            else
-            {
-                $fn = mysqli_real_escape_string($dbc,trim($_POST['first_name']));
-            }
-
-            if(empty($_POST['last_name']))
-            {
-                array_push($errors,'Enter your last name');
-            }
-            else 
-            {
-                $ln = mysqli_real_escape_string($dbc,trim($_POST['last_name']));
-            }
-
-            if(empty($_POST['email']))
-            {
-                array_push($errors,'Enter your email address');
-            }
-            else
-            {
-                $e = mysqli_real_escape_string($dbc,trim($_POST['email']));
-            }
-
-            if(empty($_POST['user_type']))
-            {
-                array_push($errors,'User type not valid');
-            }
-            else
-            {
-                $type =  mysqli_real_escape_string($dbc,trim($_POST['user_type']));
-            }
-        
-            if(!empty($_POST['pass1']))
-            {
-                if($_POST['pass1'] != $_POST['pass2'])
-                {
-                    array_push($errors,'Passwords do not match');
-                }
-                else
-                {
-                    $p = mysqli_real_escape_string($dbc,$_POST['pass1']);
-                    $hash = password_hash($p, PASSWORD_DEFAULT);
-                    $verify = password_verify($p,$hash);
-                }
-            }
-            else
-            {
-                array_push($errors,'Enter your password.');
-            }
-
-            if(empty($errors))
-            {
-                $q = "SELECT user_id FROM users WHERE email='$e'";
-                $r = mysqli_query($dbc,$q);
-                if(mysqli_num_rows($r) != 0)
-                {
-                    array_push($errors,'Email address already registered. <a href="login.php">Please login</a>.');
-                }
-            }
-
-            if(empty($errors))
-            {
-                $q = "INSERT INTO users (first_name,last_name,email,pass,reg_date,user_type) VALUES ('$fn','$ln','$e','$hash',NOW(),'$type')";
-                $r = mysqli_query($dbc,$q);
-
-                if($r)
-                {
-                    $success_string = '<h1>Registered!</h1><p>The new user has been registered.</p><p><a href="/login.php">Login</a></p>';
-                    $page_title = 'Success!';
-                    include '../../../includes/header.php';
-                    echo $success_string;
-                    include '../../../includes/footer.php';
-                    mysqli_close($dbc);
-                    exit();
-                }
-            }
-            
-        
-       
-    }
-    $page_title = 'Register';
-    include_once '../../../includes/header.php';
-?>
-<div class="row">
-    <h1>Create new user</h1>
-</div>
-<div class="row">
-<?php
-if(!empty($errors))
-{
-    echo '<h2>Error!</h2>
-    <p id="err_msg">The following error(s) occurred:<br>';
-    foreach($errors as $error)
+    if($_SERVER['REQUEST_METHOD'] == 'POST')
     {
-       echo " - $error<br>";
+        $account = new Account();
+        $email = $_POST['email'];
+        $password1 = $_POST['pass1'];
+        $password2 = $_POST['pass2'];
+        $first_name = $_POST['first_name'];
+        $last_name = $_POST['last_name'];
+        $role = $_POST['user_type'];
+        try 
+        {
+            list($validation_errors, $newId) = $account->AddAccount($email,$password1,$password2,$first_name,$last_name,$role);
+            if(!empty($validation_errors))
+            {
+                foreach($validation_errors as $err)
+                {
+                    array_push($errors, $err);
+                }
+            }
+        }
+        catch (Exception $e)
+        {
+            $dberrors = array();
+            array_push($dberrors, $e->getMessage());
+            foreach($dberrors as $error)
+            {
+                echo 'db error: ', $error;
+            }
+            die();
+        }
     }
-    echo 'Please try again.</p>';
-    mysqli_close($dbc);
+    if($newId != NULL)
+    {
+        include_once '../../../includes/header.php';
+        echo 'Success!';
+        echo $newId;
+        include_once '../../../includes/footer.php';
     }
-}
+    else
+    {
+        $page_title = 'Register';
+        include_once '../../../includes/header.php';
+    ?>
 
-?>
-<form action="new-user.php" method="POST">
-    <p>
-        First name: <input type="text" name="first_name" value="<?php if(isset($_POST['first_name'])) echo $_POST['first_name']; ?>"><br>
-        Last name: <input type="text" name="last_name" value="<?php if(isset($_POST['last_name'])) echo $_POST['last_name'];?>"><br>
-    </p>
-    <p>
-        Email address: <input type="text" name="email" value="<?php if(isset($_POST['email'])) echo $_POST['email'];?>">
-    </p>
-    <p>
-        Password: <input type="password" name="pass1" value="<?php if(isset($_POST['pass1'])) echo $_POST['pass1'];?>">
-        Confirm password: <input type="password" name="pass2" value="<?php if(isset($_POST['pass2'])) echo $_POST['pass2'];?>">
-    </p>
-    <p>User type: <input type="text"value="user"name="user_type"></p>
-    <button>Register</button>
-</form>
-</div>
+    <div class="row">
+        <h1>Create new user</h1>
+    </div>
 
-<?php
-include '../../../includes/footer.php';
-?>
+    <div class="row">
+    <?php if(!empty($errors))
+    {
+        foreach($errors as $error)
+        {
+            echo $error;
+        } 
+    }?>
+    </div>
+
+    <div class="row">
+        <form action="new-user.php" method="POST">
+            <p>
+                First name: <input type="text" name="first_name" value="<?php if(isset($_POST['first_name'])) echo $_POST['first_name']; ?>"><br>
+                Last name: <input type="text" name="last_name" value="<?php if(isset($_POST['last_name'])) echo $_POST['last_name'];?>"><br>
+            </p>
+            <p>
+                Email address: <input type="text" name="email" value="<?php if(isset($_POST['email'])) echo $_POST['email'];?>">
+            </p>
+            <p>
+                Password: <input type="password" name="pass1" value="<?php if(isset($_POST['pass1'])) echo $_POST['pass1'];?>">
+                Confirm password: <input type="password" name="pass2" value="<?php if(isset($_POST['pass2'])) echo $_POST['pass2'];?>">
+            </p>
+            <p>User type: <input type="text"value="user"name="user_type"></p>
+            <button>Register</button>
+        </form>
+    </div>
+
+    <?php
+        include_once '../../../includes/footer.php';
+    }?>
+    
+    

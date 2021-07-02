@@ -1,19 +1,21 @@
 <?php
 
-use Mockery\CountValidator\Exact;
-
 class Account
 {
     private $id;
     private $email;
     private $authenticated;
     private $role;
+    private $first_name;
+    private $last_name;
 
     public function __contruct()
     {
         $this->id = NULL;
         $this->email = NULL;
         $this->authenticated = FALSE;
+        $this->first_name = NULL;
+        $this->last_name = NUll;
     }
 
     public function __destruct() {}
@@ -36,11 +38,7 @@ class Account
     public function IsEmailValid(string $email): bool
     {
         $valid = TRUE;
-        $len = mb_strlen($email);
-        if(($len < 8) || ($len > 16))
-        {
-            $valid = FALSE;
-        }
+       
 
         return $valid;
     }
@@ -66,7 +64,7 @@ class Account
             throw new Exception('Invalid email address');
         }
         $id = NULL;
-        $query = 'SELECT user_id FROM users WHERE (user_email = :email)';
+        $query = 'SELECT user_id FROM users WHERE (email = :email)';
         $values = array(':email' => $email);
 
         try
@@ -89,40 +87,84 @@ class Account
         return $id;
     }
 
-    public function AddAccount(string $email, string $passwd): int
+    public function IsFirstNameValid($first_name)
+    {
+        $valid = TRUE;
+        $len = mb_strlen($first_name);
+
+
+        return $valid;
+    }
+
+    public function IsLastNameValid($last_name)
+    {
+        $valid = TRUE;
+        $len = mb_strlen($last_name);
+
+        
+        return $valid;
+    }
+    public function AddAccount(string $email, string $passwd, string $passwd2, string $first_name, string $last_name, string $role): array
     {
         global $pdo;
-        $email = trim($email);
-        $passwd = trim($passwd);
+        $e = trim($email);
+        $p1 = trim($passwd);
+        $p2 = trim($passwd2);
+        $fn = trim($first_name);
+        $ln = trim($last_name);
+        $r = trim($role);
 
-        if(!$this->IsEmailValid($email))
+        $errors = array();
+
+        if(empty($e) || !$this->IsEmailValid($e))
         {
-            throw new Exception('Invalid email');
+            array_push($errors, 'Invalid email');
         }
-        if(!$this->IsPasswdValid($passwd))
+        if(empty($p1) || !$this->IsPasswdValid($p1))
         {
-            throw new Exception('Invalid password');
+            array_push($errors,'Invalid password');
         }
-        if(!is_null($this->GetIdFromEmail($email)))
+        if(empty($p2) || !$this->IsPasswdValid($p2))
         {
-            throw new Exception('User name not available');
+            array_push($errors, 'Invalid password2');
+        }
+        if($p1 != $p2)
+        {
+            array_push($errors, 'Passwords do not match');
+        }
+        if(!is_null($this->GetIdFromEmail($e)))
+        {
+            array_push($errors,'Email address already in use.');
         }
 
-        $query = 'INSERT INTO users (email,pass) VALUES (:email,:passwd)';
-        $hash = password_hash($passwd, PASSWORD_DEFAULT);
-        $values = array(':email'=> $email, ':passwd'=>$hash);
-
-        try
+        if(!empty($errors))
         {
-            $res = $pdo->prepare($query);
-            $res->execute($values);
+            $errors;
         }
-        catch(PDOException $e)
+        else
         {
-            throw new Exception('Database error');
-        }
+            $query = 'INSERT INTO users (email,pass,first_name,last_name,user_type)
+                VALUES (:email,:passwd,:first_name,:last_name,:user_role)';
+            $hash = password_hash($passwd, PASSWORD_DEFAULT);
+            $values = array(':email'=> $e, 
+                ':passwd'=>$hash,
+                ':first_name'=>$fn,
+                ':last_name'=>$ln,
+                ':user_role'=>$r);
 
-        return $pdo->lastInsertId();
+            try
+            {
+                $res = $pdo->prepare($query);
+                $res->execute($values);
+            }
+            catch(PDOException $e)
+            {
+                throw new Exception('Database error');
+            }
+            return array ($errors, $pdo->lastInsertId());
+        }
+        return array($errors, NULL);
+        
     }
 
     public function IsIdValid(int $id): bool
