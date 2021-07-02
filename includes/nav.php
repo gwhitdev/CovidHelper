@@ -4,7 +4,6 @@
     $authenticated = TRUE;
     $user_role = $_SESSION['user_type'];
   }
-
 ?>
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -16,7 +15,7 @@
       <a class="navbar-brand" href="/">CovidHelper</a>
       
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-      <?php if($authenticated) {
+      <?php if($user_role == 'admin' || $user_role == 'medical' || $user_role == 'user') {
         echo '
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="/home.php">Home</a>

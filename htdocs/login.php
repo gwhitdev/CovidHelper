@@ -19,7 +19,15 @@
         try
         {
             $loggedIn = $account->Login($_POST['email'],$_POST['pass']);
-            header('Location: home.php');
+            if($loggedIn)
+            {
+                header('Location: home.php');
+            } 
+            else
+            {
+                header('Location: login.php');
+            }
+            
         }
         catch (Exception $e)
         {
